@@ -1,0 +1,271 @@
+ <!-- Content Wrapper. Contains page content -->
+ <div class="content-wrapper" style="margin-top: 50px;">
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+           <!-- SELECT2 EXAMPLE -->
+        <div class="card card-default">
+            <div class="card-header">
+              <h3 class="card-title">Nouveau Medecin</h3>
+  
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <form action="" action="" method="POST" (ngSubmit)="ajouterMedecin()" #f="ngForm">
+                <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          
+                          <input type="text" class="form-control" required
+                          name="nom" 
+                          [(ngModel)]="user.nom" 
+                          #nom="ngModel"
+                          ngModel 
+                          placeholder="nom*" style="width: 100%;">
+                          <!-- <span *ngIf="nom.touched && nom.invalid" class="error">error</span><br> -->
+                          <span style="color: red;" *ngIf="nom.touched && !nom.valid">
+                              <span *ngIf="nom.errors.required">ce champ est obligatoire !!</span>                                                                                         
+                          </span>
+                      </div>
+                      <div class="form-group">
+                        <input type="text" class="form-control" email name="email" 
+                        [(ngModel)]="user.email" 
+                        #email="ngModel"
+                        ngModel
+                        placeholder="email*" 
+                        required style="width: 100%;">			
+                        <!-- <span *ngIf="email.touched && email.invalid" class="error">error</span> -->
+                        <span style="color: red;" *ngIf="email.touched && !email.valid">
+                            <span *ngIf="email.errors.required">ce champ est obligatoire !!</span>                                             
+                            <span *ngIf="email.errors.email">Veuillez entrer une adresse email valide !!</span>                                             
+                        </span>
+                      </div>
+                      <div class="form-group">
+                      
+                        <input type="text" class="form-control" required
+                        name="specialite" 
+                        [(ngModel)]="user.specialite" 
+                        #specialite="ngModel"
+                        ngModel 
+                        placeholder="specialite*" style="width: 100%;">
+                        <!-- <span *ngIf="nom.touched && nom.invalid" class="error">error</span><br> -->
+                        <span style="color: red;" *ngIf="specialite.touched && !specialite.valid">
+                            <span *ngIf="specialite.errors.required">ce champ est obligatoire !!</span>                                                                                         
+                        </span>
+                      </div>
+
+                      <div class="form-group">
+                          <label>Hopital</label>
+                          <select class="form-control" required name="hopital" 
+                          [(ngModel)]="user.hopital" 
+                          #hopital="ngModel"
+                          ngModel (change)="selectedHopital($event)">                      
+                            <option *ngFor="let h of hopitaux" value="{{h.ObjectId}}" >{{h.nom}}</option>                        
+                          </select>
+                          <span style="color: red;" *ngIf="hopital.touched && !hopital.valid">
+                            <span *ngIf="hopital.errors.required">ce champ est obligatoire !!</span>                                                                                         
+                          </span>
+                      </div>
+                      <div class="form-group" *ngIf="afficherservice">
+                        <label>Service</label>
+                        <select class="form-control" required name="service" 
+                        [(ngModel)]="user.service" 
+                        #service="ngModel"
+                        ngModel>
+                          <option *ngFor="let s of services" value="{{s.id}}">{{s.nom}}</option>
+                        </select>
+
+                        <span style="color: red;" *ngIf="service.touched && !service.valid">
+                          <span *ngIf="service.errors.required">ce champ est obligatoire !!</span>                                                                                         
+                        </span>
+                      
+                      </div>
+                      
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-md-6">
+                    <div class="form-group">                
+                      <input type="text" class="form-control" required
+                      name="prenom" 
+                      [(ngModel)]="user.prenom" 
+                      #prenom="ngModel"
+                      ngModel 
+                      placeholder="prenom*" style="width: 100%;">
+                      <span style="color: red;" *ngIf="prenom.touched && !prenom.valid">
+                          <span *ngIf="prenom.errors.required">ce champ est obligatoire !!</span>                                                                                         
+                      </span>
+                    </div>
+                   
+                    <!-- <div class="form-group">
+                        <label for="file" class="label-file">Choisir une image</label>
+                        <input
+                        required name="photoUrl" 
+                        [(ngModel)]="user.photoUrl" 
+                        #photoUrl="ngModel"
+                        ngModel 
+                        id="file" class="input-file" type="file" (change)="fileisselected($event)">
+                        <span style="color: red;" *ngIf="photoUrl.touched && !photoUrl.valid">
+                          <span *ngIf="photoUrl.errors.required">ce champ est obligatoire !!</span>  
+                        </span>
+                       
+                    </div> -->
+                    <!-- test drag and drop file -->
+
+                              <div
+                                  class="droparea"
+                                  (dragover)="onDragOver($event)"
+                                  (drop)="onDrop($event)"
+                                  (dragleave)="onDragLeave($event)"
+                                  [class.active]="isActive"
+                                  *ngIf="imageArea"
+                                  
+                              >
+                                  <input type="file" required name="photoUrl" 
+                                  [(ngModel)]="user.photoUrl" 
+                                  #photoUrl="ngModel"
+                                  ngModel class="browse-file" (change)="onSelectedFile($event)" multiple/>
+                                  <h4>Choisissez une image ou <br /> faites glisser et déposez l'image ici</h4>
+                                 
+                              </div>
+                             
+                              
+                              <!-- <span style="color: red;" *ngIf="photoUrl.touched && !photoUrl.valid">
+                                <span *ngIf="photoUrl.errors.required">ce champ est obligatoire !!</span>  
+                              </span> -->
+                              <!-- <div class="mt-2" *ngIf="upload.progress > 0 && upload.progress != 100">
+                                  <div class="progress" style="height: 20px;margin-bottom:20px;">
+                                    <div class="progress-bar progress-bar-striped bg-info" role="progressbar" [style.width.%]="upload.progress" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{upload.progress}}%</div>
+                                  </div>
+                              </div>
+                              <div class="card mt-3 file-list" *ngIf="upload.files">
+                                  <div class="card-header">File List</div>
+                                  <ul class="list-group list-group-flush">
+                                      <ng-container *ngFor="let item of upload.files">
+                                          <li class="list-group-item">{{item.filename}} - Status: <span>Upload complete</span></li>
+                                      </ng-container>
+                                  </ul>
+                              </div> -->
+
+
+                    <!-- fin test -->
+                    <div *ngIf="nomImage">
+                      <!-- <img [src]="url" alt="" style="width: 120px;height:120px;border:2px solid black;" ><br> -->
+                      <div class="nomImage alert alert-success" role="alert">
+                         <span style="float:left;">{{nomImage}}</span> <i class="fas fa-trash red-color" style="float:right;cursor: pointer;" (click)="removeImage()"></i>
+                      </div>
+                    </div>
+                    
+                  </div>
+                  <!-- /.col -->
+                  <button class="btn btn-sm btn-info float-left" [disabled]="!f.valid">ajouter</button>
+                </div>
+              </form>
+              <!-- /.row -->
+            </div>
+            <!-- /.card-body -->
+         
+          </div>
+          <!-- /.card -->
+       
+
+     
+
+        <!-- Main row -->
+        <div class="row">
+          <!-- Left col -->
+          <div class="col-md-12">
+           
+        
+
+            <!-- TABLE: LATEST ORDERS -->
+            <div class="card">
+              <div class="card-header border-transparent">
+                <h3 class="card-title">Medecin</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                 
+               
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table m-0">
+                    <thead>
+                      <tr>
+                        <th>Id</th>
+                        <th>Nom</th>
+                        <th>prenom</th>
+                        <th>email</th>
+                        <th>specialite</th>
+                        <th>hopital</th>
+                        <th>service</th>
+                        <th>image</th>
+                        <th>options</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let m of medecins">
+                        <td><a href="pages/examples/invoice.html">{{m.id}}</a></td>
+                        <td>
+                          {{m.nom}}
+                        </td>
+                        <td>
+                          {{m.prenom}}
+                        </td>
+                        <td>
+                          {{m.email}}
+                        </td>
+                        <td>
+                          {{m.specialite}}
+                        </td>
+                        <td>
+                          {{m.hopital}}
+                        </td>
+                        <td>
+                          {{m.service}}
+                        </td>
+                        <td>
+                          <img [src]="m?.photoUrl" alt="" style="width: 100px;height: 100px;" />
+                        </td>
+                        <td>
+                          <a class="btn btn-app">
+                            <i class="fas fa-edit"></i> Edit
+                          </a>
+                          <a class="btn btn-app">
+                            <i class="fas fa-trash red-color"></i> supprimer
+                          </a>
+  
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.table-responsive -->
+              </div>
+              <!-- /.card-body -->
+          
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+
+    
+        </div>
+        <!-- /.row -->
+      </div><!--/. container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  
